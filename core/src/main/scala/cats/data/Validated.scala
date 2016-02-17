@@ -341,4 +341,11 @@ trait ValidatedFunctions {
    * the invalid of the `Validated` when the specified `Option` is `None`.
    */
   def fromOption[A, B](o: Option[B], ifNone: => A): Validated[A,B] = o.fold(invalid[A, B](ifNone))(valid)
+
+  /**
+    * Create a `Validated[A,B]` using a boolena, where the provided `ifTrue` is transform to a valid
+    * and `ifFalse` to an invalid
+    */
+  def fromBoolean[A, B](test: Boolean, ifFalse: A, ifTrue: B): Validated[A, B] =
+    if(test) valid[A, B](ifTrue) else invalid[A, B](ifFalse)
 }

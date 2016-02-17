@@ -189,4 +189,22 @@ class ValidatedTests extends CatsSuite {
     val z = x.map2(y)((i, b) => if (b) i + 1 else i)
     z should === (NonEmptyList("error 1", "error 2").invalid[Int])
   }
+
+  test("fromBoolean is invalid on false") {
+    forAll { (test: Boolean, invalid: String, valid: String) =>
+      Validated.fromBoolean(test, invalid, valid).isValid should === (test)
+    }
+  }
+
+  test("fromBoolean return the invalid value on false") {
+    forAll { (invalid: String, valid: String) =>
+      Validated.fromBoolean(false, invalid, valid) should === (invalid[String, String](invalid))
+    }
+  }
+
+  test("fromBoolean return the valid value on true") {
+    forAll { (invalid: String, valid: String) =>
+      Validated.fromBoolean(false, invalid, valid) should === (valid[String, String](valid))
+    }
+  }
 }
